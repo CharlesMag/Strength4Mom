@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.example.strength4mom"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.strength4mom"
@@ -84,4 +84,6 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.7") // LiveData
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7") // ViewModel
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.1")
+    implementation(libs.material3)
+    implementation(libs.androidx.runtime.livedata.v178)
 }
