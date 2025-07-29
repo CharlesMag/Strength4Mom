@@ -1,6 +1,7 @@
 package com.example.strength4mom.ui.theme.search
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -8,10 +9,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -24,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -105,14 +109,6 @@ fun SearchBarItem(
             label = { Text("Search for an exercise name") },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
-//            trailingIcon = {
-//                Text(
-//                    text = muscleQuery?.let { "Muscle: $it ▼" } ?: "Muscle ▼",
-//                    modifier = Modifier
-//                        .clickable { expanded1 = true }
-//                        .padding(8.dp)
-//                )
-//            }
         )
 
         Spacer(modifier.padding(bottom = 8.dp))
@@ -125,7 +121,7 @@ fun SearchBarItem(
                 .padding(horizontal = 8.dp)
         ) {
             Button(
-                onClick = { expanded1 = true}
+                onClick = { expanded1 = true }
             ) {
                 Text(
                     text = muscleQuery?.let { "Muscle: $it ▼" } ?: "Muscle ▼",
@@ -136,7 +132,7 @@ fun SearchBarItem(
             }
 
             Button(
-                onClick = { expanded2 = true}
+                onClick = { expanded2 = true }
             ) {
                 Text(
                     text = typeQuery?.let { "Type: $it ▼" } ?: "Type ▼",
@@ -148,7 +144,13 @@ fun SearchBarItem(
         }
 
         Button(
-            onClick = { exerciseViewModel.fetchExercises(muscle = muscleQuery, name = nameQuery, type = typeQuery) },
+            onClick = {
+                exerciseViewModel.fetchExercises(
+                    muscle = muscleQuery,
+                    name = nameQuery,
+                    type = typeQuery
+                )
+            },
         ) {
             Text(text = "Search")
         }
@@ -159,8 +161,20 @@ fun SearchBarItem(
             Column(
                 horizontalAlignment = Alignment.Start,
                 modifier = modifier
+                    .padding(8.dp)
             ) {
+                val isLoading by exerciseViewModel.isLoading
                 // Display exercises list or a fallback message if no data
+                if (isLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .size(48.dp)
+                            .padding(16.dp)
+                    )
+                } else {
+                    Text(text = "Enter an exercise name of use the filters")
+                }
+
                 if (exercises.isNotEmpty()) {
                     exercises.forEach { exercise ->
                         LazyColumn {
@@ -182,8 +196,11 @@ fun SearchBarItem(
                         }
                     }
                 } else {
+                    val error by exerciseViewModel.errorMessage
                     // Fallback text if no exercises are found
-                    Text(text = "No exercises found")
+                    if (error != null) {
+                        Text(text = "Error: $error", color = Color.Red)
+                    }
                 }
             }
         }
