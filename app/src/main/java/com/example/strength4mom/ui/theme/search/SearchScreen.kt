@@ -1,7 +1,6 @@
 package com.example.strength4mom.ui.theme.search
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,6 +20,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,6 +34,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.strength4mom.R
 import com.example.strength4mom.network.Exercise
+import com.example.strength4mom.ui.theme.utils.muscleList
+import com.example.strength4mom.ui.theme.utils.typeList
 
 
 @Composable
@@ -53,16 +55,11 @@ fun SearchScreen(
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun SearchBarItem(
-    exerciseViewModel: ExerciseViewModel = viewModel(),
-    exercises: List<Exercise> = exerciseViewModel.exercises.value,
+    searchViewModel: SearchViewModel = viewModel(),
+    exercises: List<Exercise> = searchViewModel.exercises.value,
     modifier: Modifier = Modifier,
 ) {
-    var nameQuery: String? by remember { mutableStateOf(null) }
-    var muscleQuery: String? by remember { mutableStateOf(null) }
-    var typeQuery: String? by remember { mutableStateOf(null) }
-    var expanded1 by remember { mutableStateOf(false) }
-    var expanded2 by remember { mutableStateOf(false) }
-
+    val searchUiState by searchViewModel.uiState.collectAsState()
 
     Column(
 //        verticalArrangement = Arrangement.Center,
@@ -70,32 +67,32 @@ fun SearchBarItem(
     ) {
 
         DropdownMenu(
-            expanded = expanded1,
-            onDismissRequest = { expanded1 = false },
+            expanded = searchUiState.muscleExpanded,
+            onDismissRequest = { searchViewModel.muscleExpanded() },
             modifier = Modifier.fillMaxWidth()
         ) {
             muscleList.forEach { muscleList ->
                 DropdownMenuItem(
                     text = { Text(muscleList) },
                     onClick = {
-                        expanded1 = false
-                        muscleQuery = muscleList.lowercase()
+                        searchViewModel.muscleExpanded()
+                        searchViewModel.muscleDropdownSelection(muscleList.lowercase())
                     }
                 )
             }
         }
 
         DropdownMenu(
-            expanded = expanded2,
-            onDismissRequest = { expanded2 = false },
+            expanded = searchUiState.typeExpanded,
+            onDismissRequest = { searchViewModel.typeExpanded() },
             modifier = Modifier.fillMaxWidth()
         ) {
             typeList.forEach { typeList ->
                 DropdownMenuItem(
                     text = { Text(typeList) },
                     onClick = {
-                        expanded2 = false
-                        typeQuery = typeList.lowercase()
+                        searchViewModel.typeExpanded()
+                        searchViewModel.typeDropdownSelection(typeList.lowercase())
                     }
                 )
             }
@@ -104,8 +101,8 @@ fun SearchBarItem(
         Spacer(modifier.padding(bottom = 8.dp))
 
         TextField(
-            value = nameQuery ?: "",
-            onValueChange = { query -> nameQuery = query },
+            value = searchUiState.searchBarQuery ?: "",
+            onValueChange = { it -> searchViewModel.searchBarQueryChange(it) },
             label = { Text("Search for an exercise name") },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
@@ -121,23 +118,24 @@ fun SearchBarItem(
                 .padding(horizontal = 8.dp)
         ) {
             Button(
-                onClick = { expanded1 = true }
+                onClick = { searchViewModel.muscleExpanded() }
             ) {
                 Text(
-                    text = muscleQuery?.let { "Muscle: $it ▼" } ?: "Muscle ▼",
+                    text = searchUiState.muscleDropdownSelection?.let { "Muscle: $it ▼" }
+                        ?: "Muscle ▼",
                     modifier = Modifier
-                        .clickable { expanded1 = true }
+                        .clickable { searchViewModel.muscleExpanded() }
                         .padding(8.dp)
                 )
             }
 
             Button(
-                onClick = { expanded2 = true }
+                onClick = { searchViewModel.typeExpanded() }
             ) {
                 Text(
-                    text = typeQuery?.let { "Type: $it ▼" } ?: "Type ▼",
+                    text = searchUiState.typeDropdownSelection?.let { "Type: $it ▼" } ?: "Type ▼",
                     modifier = Modifier
-                        .clickable { expanded2 = true }
+                        .clickable { searchViewModel.typeExpanded() }
                         .padding(8.dp)
                 )
             }
@@ -145,10 +143,10 @@ fun SearchBarItem(
 
         Button(
             onClick = {
-                exerciseViewModel.fetchExercises(
-                    muscle = muscleQuery,
-                    name = nameQuery,
-                    type = typeQuery
+                searchViewModel.fetchExercises(
+                    muscle = searchUiState.muscleDropdownSelection,
+                    name = searchUiState.searchBarQuery,
+                    type = searchUiState.typeDropdownSelection
                 )
             },
         ) {
@@ -163,7 +161,7 @@ fun SearchBarItem(
                 modifier = modifier
                     .padding(8.dp)
             ) {
-                val isLoading by exerciseViewModel.isLoading
+                val isLoading by searchViewModel.isLoading
                 // Display exercises list or a fallback message if no data
                 if (isLoading) {
                     CircularProgressIndicator(
@@ -196,7 +194,7 @@ fun SearchBarItem(
                         }
                     }
                 } else {
-                    val error by exerciseViewModel.errorMessage
+                    val error by searchViewModel.errorMessage
                     // Fallback text if no exercises are found
                     if (error != null) {
                         Text(text = "Error: $error", color = Color.Red)

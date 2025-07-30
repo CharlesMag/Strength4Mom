@@ -37,12 +37,6 @@ import com.example.strength4mom.ui.theme.utils.StrengthNavigationApp
 
 
 @Composable
-        /**
-         * import androidx.lifecycle.viewmodel.compose.viewModel
-         * Also need to add     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
-         * in gradle.kts
-         * Needed to use viewModel()
-         * */
 fun StrengthApp(
     viewModel: ExoViewModel = viewModel(),
     windowSize: WindowWidthSizeClass,

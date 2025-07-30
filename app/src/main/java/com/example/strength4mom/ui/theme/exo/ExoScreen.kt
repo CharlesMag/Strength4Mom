@@ -55,7 +55,6 @@ fun ExoScreenItem(
     exoViewModel: ExoViewModel = viewModel(key = exo.Id.toString()),
     modifier: Modifier = Modifier
 ) {
-    val uiState by viewModel.uiState.collectAsState()
 
     Card(
         modifier = modifier
