@@ -1,8 +1,10 @@
 package com.example.strength4mom.ui.theme.search
 
 import android.annotation.SuppressLint
+import android.app.appsearch.SearchResult
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -40,32 +42,106 @@ import com.example.strength4mom.ui.theme.utils.typeList
 
 @Composable
 fun SearchScreen(
-    modifier: Modifier = Modifier
-) {
-    Column(
-        verticalArrangement = Arrangement.Center
-    ) {
-        SearchBarItem()
-//        ScreenResult()
-    }
-
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@Composable
-fun SearchBarItem(
     searchViewModel: SearchViewModel = viewModel(),
     exercises: List<Exercise> = searchViewModel.exercises.value,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     val searchUiState by searchViewModel.uiState.collectAsState()
 
     Column(
-//        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        SearchBarItem(
+            searchViewModel,
+            searchUiState
+        )
 
+        FiltersAndSearch(
+            searchViewModel,
+            searchUiState
+        )
+
+        SearchResult(
+            searchUiState,
+            exercises,
+            searchViewModel
+        )
+    }
+
+}
+
+@Composable
+fun SearchResult(
+    searchUiState: SearchUiState,
+    exercises: List<Exercise>,
+    searchViewModel: SearchViewModel,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+            .padding(8.dp)
+    ) {
+        val isLoading by searchViewModel.isLoading
+        // Display exercises list or a fallback message if no data
+        if (isLoading) {
+            CircularProgressIndicator(
+                modifier = Modifier
+                    .size(48.dp)
+                    .padding(16.dp)
+            )
+        }
+        if (!isLoading && exercises.isEmpty()) {
+            Text(text = "Enter an exercise name of use the filters")
+        }
+    }
+    Column(
+        horizontalAlignment = Alignment.Start,
+        modifier = modifier
+            .padding(8.dp)
+    ) {
+        if (exercises.isNotEmpty()) {
+            exercises.forEach { exercise ->
+                Card(
+                    modifier = modifier
+                        .padding(dimensionResource(R.dimen.padding_small))
+                ) {
+                    LazyColumn {
+                        items(exercises) { exercise ->
+                            Text(
+                                textAlign = TextAlign.Start,
+                                text = """
+                                        |Name: ${exercise.name},
+                                        |Muscle: ${exercise.muscle},
+                                        |Type: ${exercise.type},
+                                        |Equipment: ${exercise.equipment},
+                                        |Instructions: ${exercise.instructions},
+                                       """.trimMargin(),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(dimensionResource(R.dimen.padding_medium))
+                            )
+                        }
+                    }
+                }
+            }
+        } else {
+            val error by searchViewModel.errorMessage
+            // Fallback text if no exercises are found
+            if (error != null) {
+                Text(text = "Error: $error", color = Color.Red)
+            }
+        }
+    }
+}
+
+@Composable
+fun FiltersAndSearch(
+    searchViewModel: SearchViewModel = viewModel(),
+    searchUiState: SearchUiState
+) {
+    Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.padding(8.dp)) {
         DropdownMenu(
             expanded = searchUiState.muscleExpanded,
             onDismissRequest = { searchViewModel.muscleExpanded() },
@@ -98,6 +174,59 @@ fun SearchBarItem(
             }
         }
 
+        Button(
+            onClick = { searchViewModel.muscleExpanded() }
+        ) {
+            Text(
+                text = searchUiState.muscleDropdownSelection?.let { "Muscle: $it ▼" }
+                    ?: "Muscle ▼",
+                modifier = Modifier
+                    .clickable { searchViewModel.muscleExpanded() }
+                    .padding(8.dp)
+            )
+        }
+
+        Spacer(modifier = Modifier.padding(8.dp))
+
+        Button(
+            onClick = { searchViewModel.typeExpanded() }
+        ) {
+            Text(
+                text = searchUiState.typeDropdownSelection?.let { "Type: $it ▼" } ?: "Type ▼",
+                modifier = Modifier
+                    .clickable { searchViewModel.typeExpanded() }
+                    .padding(8.dp)
+            )
+        }
+
+    }
+
+    Button(
+        onClick = {
+            searchViewModel.fetchExercises(
+                muscle = searchUiState.muscleDropdownSelection,
+                name = searchUiState.searchBarQuery,
+                type = searchUiState.typeDropdownSelection
+            )
+        },
+    ) {
+        Text(text = "Search")
+    }
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@Composable
+fun SearchBarItem(
+    searchViewModel: SearchViewModel,
+    searchUiState: SearchUiState,
+    modifier: Modifier = Modifier,
+) {
+
+    Column(
+        verticalArrangement = Arrangement.SpaceEvenly
+    ) {
         Spacer(modifier.padding(bottom = 8.dp))
 
         TextField(
@@ -117,98 +246,7 @@ fun SearchBarItem(
                 .fillMaxWidth()
                 .padding(horizontal = 8.dp)
         ) {
-            Button(
-                onClick = { searchViewModel.muscleExpanded() }
-            ) {
-                Text(
-                    text = searchUiState.muscleDropdownSelection?.let { "Muscle: $it ▼" }
-                        ?: "Muscle ▼",
-                    modifier = Modifier
-                        .clickable { searchViewModel.muscleExpanded() }
-                        .padding(8.dp)
-                )
-            }
-
-            Button(
-                onClick = { searchViewModel.typeExpanded() }
-            ) {
-                Text(
-                    text = searchUiState.typeDropdownSelection?.let { "Type: $it ▼" } ?: "Type ▼",
-                    modifier = Modifier
-                        .clickable { searchViewModel.typeExpanded() }
-                        .padding(8.dp)
-                )
-            }
         }
-
-        Button(
-            onClick = {
-                searchViewModel.fetchExercises(
-                    muscle = searchUiState.muscleDropdownSelection,
-                    name = searchUiState.searchBarQuery,
-                    type = searchUiState.typeDropdownSelection
-                )
-            },
-        ) {
-            Text(text = "Search")
-        }
-        Card(
-            modifier = modifier
-                .padding(dimensionResource(R.dimen.padding_small))
-        ) {
-            Column(
-                horizontalAlignment = Alignment.Start,
-                modifier = modifier
-                    .padding(8.dp)
-            ) {
-                val isLoading by searchViewModel.isLoading
-                // Display exercises list or a fallback message if no data
-                if (isLoading) {
-                    CircularProgressIndicator(
-                        modifier = Modifier
-                            .size(48.dp)
-                            .padding(16.dp)
-                    )
-                } else {
-                    Text(text = "Enter an exercise name of use the filters")
-                }
-
-                if (exercises.isNotEmpty()) {
-                    exercises.forEach { exercise ->
-                        LazyColumn {
-                            items(exercises) { exercise ->
-                                Text(
-                                    textAlign = TextAlign.Start,
-                                    text = """
-                                        |Name: ${exercise.name},
-                                        |Muscle: ${exercise.muscle},
-                                        |Type: ${exercise.type},
-                                        |Equipment: ${exercise.equipment},
-                                        |Instructions: ${exercise.instructions},
-                                       """.trimMargin(),
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(dimensionResource(R.dimen.padding_medium))
-                                )
-                            }
-                        }
-                    }
-                } else {
-                    val error by searchViewModel.errorMessage
-                    // Fallback text if no exercises are found
-                    if (error != null) {
-                        Text(text = "Error: $error", color = Color.Red)
-                    }
-                }
-            }
-        }
-
-
     }
-}
-
-
-@Composable
-fun ScreenResult(modifier: Modifier = Modifier) {
 
 }
