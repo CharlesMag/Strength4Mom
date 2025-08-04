@@ -22,6 +22,7 @@ import com.example.strength4mom.ui.theme.theme.Strength4MomTheme
 fun StartAppScreen(
     onStartWorkoutButtonClicked: () -> Unit,
     onStartSearchButtonClicked: () -> Unit,
+    onStartCarouselTest: () -> Unit,
     windowSize: WindowWidthSizeClass,
     modifier: Modifier = Modifier
 ) {
@@ -49,6 +50,13 @@ fun StartAppScreen(
                 text = "Search Page",
             )
         }
+        Button(
+            onClick = onStartCarouselTest,
+        ) {
+            Text(
+                text = "Carousel Test",
+            )
+        }
     }
 }
 
@@ -61,6 +69,7 @@ fun StrengthAppPreview() {
                 windowSize = WindowWidthSizeClass.Medium,
                 onStartWorkoutButtonClicked = {},
                 onStartSearchButtonClicked = {},
+                onStartCarouselTest = {},
             )
         }
     }

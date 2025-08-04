@@ -33,6 +33,8 @@ import com.example.strength4mom.R
 import com.example.strength4mom.network.Exercise
 import com.example.strength4mom.ui.theme.utils.muscleList
 import com.example.strength4mom.ui.theme.utils.typeList
+import android.util.Log
+import kotlin.math.log
 
 
 @Composable
@@ -86,6 +88,11 @@ fun SearchResult(
         }
         if (!isLoading && exercises.isEmpty()) {
             Text(text = "Enter an exercise name of use the filters")
+        }
+
+        if (exercises.isNotEmpty()) {
+            var itemCount = exercises.size
+            println("NUMBER OF EXO: $itemCount")
         }
     }
     Column(

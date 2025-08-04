@@ -29,6 +29,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.strength4mom.data.local.DataSourceExercises.exos
+import com.example.strength4mom.ui.theme.CarouselExample_MultiBrowse
 import com.example.strength4mom.ui.theme.exo.ExoScreenItem
 import com.example.strength4mom.ui.theme.exo.ExoViewModel
 import com.example.strength4mom.ui.theme.StartAppScreen
@@ -81,6 +82,7 @@ fun StrengthApp(
                 StartAppScreen(
                     onStartWorkoutButtonClicked = { navHostController.navigate(Strength4MomScreen.ExoScreen.name) },
                     onStartSearchButtonClicked = { navHostController.navigate(Strength4MomScreen.SearchScreen.name) },
+                    onStartCarouselTest = { navHostController.navigate(Strength4MomScreen.CarouselTest.name)},
                     windowSize = WindowWidthSizeClass.Compact,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -97,6 +99,9 @@ fun StrengthApp(
             }
             composable(route = Strength4MomScreen.SearchScreen.name) {
                     SearchScreen()
+            }
+            composable(route = Strength4MomScreen.CarouselTest.name) {
+                CarouselExample_MultiBrowse()
             }
         }
     }
@@ -136,5 +141,6 @@ enum class Strength4MomScreen(@StringRes val title: Int) {
     Start(title = R.string.app_name),
     ExoScreen(title = R.string.workout_page),
     SearchScreen(title = R.string.searchScreen),
+    CarouselTest(title = R.string.carouselTestScreen),
 
 }
