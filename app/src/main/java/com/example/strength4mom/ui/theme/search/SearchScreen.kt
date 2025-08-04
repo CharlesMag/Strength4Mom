@@ -145,11 +145,12 @@ fun FiltersAndSearch(
         DropdownMenu(
             expanded = searchUiState.muscleExpanded,
             onDismissRequest = { searchViewModel.muscleExpanded() },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
         ) {
             muscleList.forEach { muscleList ->
                 DropdownMenuItem(
-                    text = { Text(muscleList) },
+                    text = { Text(muscleList, maxLines = 1) },
                     onClick = {
                         searchViewModel.muscleExpanded()
                         searchViewModel.muscleDropdownSelection(muscleList.lowercase())
@@ -178,8 +179,8 @@ fun FiltersAndSearch(
             onClick = { searchViewModel.muscleExpanded() }
         ) {
             Text(
-                text = searchUiState.muscleDropdownSelection?.let { "Muscle: $it ▼" }
-                    ?: "Muscle ▼",
+                text = searchUiState.muscleDropdownSelection?.let { "$it ▼" }
+                    ?: "Muscle ▼", maxLines = 1,
                 modifier = Modifier
                     .clickable { searchViewModel.muscleExpanded() }
                     .padding(8.dp)
@@ -192,7 +193,7 @@ fun FiltersAndSearch(
             onClick = { searchViewModel.typeExpanded() }
         ) {
             Text(
-                text = searchUiState.typeDropdownSelection?.let { "Type: $it ▼" } ?: "Type ▼",
+                text = searchUiState.typeDropdownSelection?.let { "$it ▼" } ?: "Type ▼", maxLines = 1,
                 modifier = Modifier
                     .clickable { searchViewModel.typeExpanded() }
                     .padding(8.dp)
