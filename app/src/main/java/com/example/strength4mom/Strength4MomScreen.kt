@@ -96,7 +96,7 @@ fun StrengthApp(
                 }
             }
             composable(route = Strength4MomScreen.SearchScreen.name) {
-                    SearchScreen(modifier = Modifier)
+                    SearchScreen()
             }
         }
     }

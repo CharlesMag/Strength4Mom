@@ -20,4 +20,5 @@
     <string name="reset_title">Reset your set?</string>
     <string name="reset_body">Are you sure you want to reset your Set count for this exercise ?</string>
     <string name="reset_cancel">Cancel</string>
+    <string name="logo_with_text_description">App logo with text Strenght4Mom</string>
 </resources>

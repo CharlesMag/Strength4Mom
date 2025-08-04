@@ -2,7 +2,7 @@ package com.example.strength4mom.ui.theme.theme
 
 import androidx.compose.ui.graphics.Color
 
-val primaryLight = Color(0xFF6F3C7A)
+val primaryLight = Color(0xFF8766B8)
 val onPrimaryLight = Color(0xFFFFFFFF)
 val primaryContainerLight = Color(0xFF9761A1)
 val onPrimaryContainerLight = Color(0xFFFFFFFF)
