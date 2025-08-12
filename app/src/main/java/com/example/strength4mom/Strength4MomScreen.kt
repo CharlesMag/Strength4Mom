@@ -29,7 +29,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.strength4mom.data.local.DataSourceExercises.exos
-import com.example.strength4mom.ui.theme.CarouselExample_MultiBrowse
+import com.example.strength4mom.ui.theme.carousel.CarouselScreen
 import com.example.strength4mom.ui.theme.exo.ExoScreenItem
 import com.example.strength4mom.ui.theme.exo.ExoViewModel
 import com.example.strength4mom.ui.theme.StartAppScreen
@@ -39,7 +39,6 @@ import com.example.strength4mom.ui.theme.utils.StrengthNavigationApp
 
 @Composable
 fun StrengthApp(
-    viewModel: ExoViewModel = viewModel(),
     windowSize: WindowWidthSizeClass,
     navHostController: NavHostController = rememberNavController(),
 ) {
@@ -90,7 +89,6 @@ fun StrengthApp(
                 )
             }
             composable(route = Strength4MomScreen.ExoScreen.name) {
-                // exos = listViewmodel.getData
                 LazyColumn {
                     items(exos) {
                         ExoScreenItem(exo = it, windowSize)
@@ -101,7 +99,7 @@ fun StrengthApp(
                     SearchScreen()
             }
             composable(route = Strength4MomScreen.CarouselTest.name) {
-                CarouselExample_MultiBrowse()
+                CarouselScreen()
             }
         }
     }
