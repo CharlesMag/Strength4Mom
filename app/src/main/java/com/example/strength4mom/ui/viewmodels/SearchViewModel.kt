@@ -43,7 +43,7 @@ class SearchViewModel : ViewModel() {
         viewModelScope.launch {
             isLoading.value = true
             try {
-                val response = RetrofitInstance.apiService.getExercises(
+                val response = RetrofitInstance.apiService.fetchExercises(
                     apiKey,
                     filteredMuscle,
                     filteredName,

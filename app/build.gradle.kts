@@ -34,9 +34,6 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
     buildFeatures {
         compose = true
     }
@@ -50,40 +47,68 @@ android {
     }
 }
 
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8)
+    }
+}
+
 dependencies {
+
     implementation(platform(libs.androidx.compose.bom.v20230601))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
+
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
+
     implementation(libs.androidx.material3)
     implementation(libs.androidx.navigation.runtime.ktx)
     implementation(libs.androidx.navigation.compose)
+
     testImplementation(libs.junit)
+
     androidTestImplementation(platform(libs.androidx.compose.bom.v20240900))
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
+
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose.v261)
+
     implementation(libs.androidx.material.icons.extended)
     implementation(libs.androidx.material3.window.size.class1)
+
     implementation(libs.glide)
+
     annotationProcessor(libs.compiler)
+
     implementation(libs.support.annotations)
+
     annotationProcessor(libs.support.annotations)
-    implementation("com.squareup.retrofit2:retrofit:2.11.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.11.0") // for JSON conversion
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.1") // Coroutines
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.7") // LiveData
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7") // ViewModel
-    implementation("com.squareup.okhttp3:logging-interceptor:4.9.1")
+
+    implementation(libs.retrofit)
+
+    implementation(libs.converter.gson) // for JSON conversion
+
+    implementation(libs.kotlinx.coroutines.android) // Coroutines
+
+    implementation(libs.androidx.lifecycle.livedata.ktx) // LiveData
+    implementation(libs.androidx.lifecycle.viewmodel.ktx) // ViewModel
+
+    implementation(libs.logging.interceptor)
+
+    implementation(libs.koin.android)
+    implementation(libs.koin.compose)
+    implementation(libs.koin.viewmodel)
+
     implementation(libs.material3)
     implementation(libs.androidx.runtime.livedata.v178)
 }

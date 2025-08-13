@@ -44,7 +44,7 @@ object RetrofitInstance {
 
 interface ApiService {
     @GET("exercises")
-    suspend fun getExercises(
+    suspend fun fetchExercises(
         @Header("X-Api-Key") apiKey: String,
         @Query("muscle") muscle: String? = null,
         @Query("name") name: String? = null,
