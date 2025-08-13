@@ -1,9 +1,7 @@
 package com.example.strength4mom.data.local
 
-import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import com.example.strength4mom.R
-import com.example.strength4mom.model.ExoItem
+import com.example.strength4mom.data.dto.ExoItemClass
 
 /**
  * A data class to represent the information presented in the exercise card
@@ -12,7 +10,7 @@ import com.example.strength4mom.model.ExoItem
 //My listOf exercises to be used by the app
 object DataSourceExercises {
     val exos = listOf(
-        ExoItem.Exo(
+        ExoItemClass.Exo(
             R.drawable.gobletsquatstart,
             R.string.exercise_1,
             4,
@@ -20,7 +18,7 @@ object DataSourceExercises {
             R.string.exercise_description_1,
             1
         ),
-        ExoItem.Exo(
+        ExoItemClass.Exo(
             R.drawable.singlelegdeadlift,
             R.string.exercise_2,
             5,
@@ -28,7 +26,7 @@ object DataSourceExercises {
             R.string.exercise_description_2,
             2
         ),
-        ExoItem.Exo(
+        ExoItemClass.Exo(
             R.drawable.singleleglutebridge,
             R.string.exercise_3,
             4,
@@ -38,7 +36,6 @@ object DataSourceExercises {
         )
     )
 }
-
 
 
 ////
