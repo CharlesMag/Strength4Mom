@@ -1,10 +1,8 @@
 package com.example.strength4mom.ui.theme.search
 
 import android.annotation.SuppressLint
-import android.app.appsearch.SearchResult
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -24,9 +22,6 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -38,13 +33,14 @@ import com.example.strength4mom.R
 import com.example.strength4mom.network.Exercise
 import com.example.strength4mom.ui.theme.utils.muscleList
 import com.example.strength4mom.ui.theme.utils.typeList
+import android.util.Log
+import kotlin.math.log
 
 
 @Composable
 fun SearchScreen(
     searchViewModel: SearchViewModel = viewModel(),
     exercises: List<Exercise> = searchViewModel.exercises.value,
-    modifier: Modifier = Modifier
 ) {
     val searchUiState by searchViewModel.uiState.collectAsState()
 
@@ -63,7 +59,6 @@ fun SearchScreen(
         )
 
         SearchResult(
-            searchUiState,
             exercises,
             searchViewModel
         )
@@ -73,7 +68,6 @@ fun SearchScreen(
 
 @Composable
 fun SearchResult(
-    searchUiState: SearchUiState,
     exercises: List<Exercise>,
     searchViewModel: SearchViewModel,
     modifier: Modifier = Modifier
@@ -94,6 +88,11 @@ fun SearchResult(
         }
         if (!isLoading && exercises.isEmpty()) {
             Text(text = "Enter an exercise name of use the filters")
+        }
+
+        if (exercises.isNotEmpty()) {
+            var itemCount = exercises.size
+            println("NUMBER OF EXO: $itemCount")
         }
     }
     Column(
@@ -145,11 +144,12 @@ fun FiltersAndSearch(
         DropdownMenu(
             expanded = searchUiState.muscleExpanded,
             onDismissRequest = { searchViewModel.muscleExpanded() },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
         ) {
             muscleList.forEach { muscleList ->
                 DropdownMenuItem(
-                    text = { Text(muscleList) },
+                    text = { Text(muscleList, maxLines = 1) },
                     onClick = {
                         searchViewModel.muscleExpanded()
                         searchViewModel.muscleDropdownSelection(muscleList.lowercase())
@@ -178,8 +178,8 @@ fun FiltersAndSearch(
             onClick = { searchViewModel.muscleExpanded() }
         ) {
             Text(
-                text = searchUiState.muscleDropdownSelection?.let { "Muscle: $it ▼" }
-                    ?: "Muscle ▼",
+                text = searchUiState.muscleDropdownSelection?.let { "$it ▼" }
+                    ?: "Muscle ▼", maxLines = 1,
                 modifier = Modifier
                     .clickable { searchViewModel.muscleExpanded() }
                     .padding(8.dp)
@@ -192,7 +192,7 @@ fun FiltersAndSearch(
             onClick = { searchViewModel.typeExpanded() }
         ) {
             Text(
-                text = searchUiState.typeDropdownSelection?.let { "Type: $it ▼" } ?: "Type ▼",
+                text = searchUiState.typeDropdownSelection?.let { "$it ▼" } ?: "Type ▼", maxLines = 1,
                 modifier = Modifier
                     .clickable { searchViewModel.typeExpanded() }
                     .padding(8.dp)

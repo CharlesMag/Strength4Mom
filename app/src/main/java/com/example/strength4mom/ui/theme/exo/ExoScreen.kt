@@ -31,6 +31,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -212,38 +213,6 @@ fun ExoExpanded(
             .clip(MaterialTheme.shapes.small)
     )
     Text(stringResource(exoDescription))
-}
-
-@Composable
-fun ResetPrompt(
-    resetCurrentSet: () -> Unit,
-    updateExoCapsule: () -> Unit,
-    ) {
-    AlertDialog(
-        onDismissRequest = {},
-        confirmButton = {
-            TextButton(
-                onClick = {
-                    resetCurrentSet()
-                    updateExoCapsule()
-                }
-            ) {
-                Text(stringResource(R.string.reset_button)) }
-        },
-        title = {
-            Text(stringResource(R.string.reset_title))
-        },
-        text = {
-            Text(stringResource(R.string.reset_body))
-        },
-        dismissButton = {
-            TextButton(
-                onClick = {}
-            ) {
-                Text(stringResource(R.string.reset_cancel))
-            }
-        },
-    )
 }
 
 @Preview(showBackground = false)

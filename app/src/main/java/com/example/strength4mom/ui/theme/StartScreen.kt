@@ -1,5 +1,6 @@
 package com.example.strength4mom.ui.theme
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -10,6 +11,7 @@ import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.strength4mom.R
@@ -20,6 +22,7 @@ import com.example.strength4mom.ui.theme.theme.Strength4MomTheme
 fun StartAppScreen(
     onStartWorkoutButtonClicked: () -> Unit,
     onStartSearchButtonClicked: () -> Unit,
+    onStartCarouselTest: () -> Unit,
     windowSize: WindowWidthSizeClass,
     modifier: Modifier = Modifier
 ) {
@@ -29,6 +32,10 @@ fun StartAppScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+        Image(
+            painter = painterResource(id = R.drawable.logo_writting),
+            contentDescription = stringResource(id = R.string.logo_with_text_description)
+        )
         Button(
             onClick = onStartWorkoutButtonClicked,
         ) {
@@ -43,6 +50,13 @@ fun StartAppScreen(
                 text = "Search Page",
             )
         }
+        Button(
+            onClick = onStartCarouselTest,
+        ) {
+            Text(
+                text = "Carousel Test",
+            )
+        }
     }
 }
 
@@ -55,6 +69,7 @@ fun StrengthAppPreview() {
                 windowSize = WindowWidthSizeClass.Medium,
                 onStartWorkoutButtonClicked = {},
                 onStartSearchButtonClicked = {},
+                onStartCarouselTest = {},
             )
         }
     }

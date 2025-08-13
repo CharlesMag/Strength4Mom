@@ -2,6 +2,7 @@
     <string name="app_name">Strength4Mom</string>
     <string name="workout_page">Your Workout</string>
     <string name="searchScreen">Search Screen</string>
+    <string name="carouselTestScreen">Carousel Screen</string>
     <string name="StarterScreenButton">Start your workout</string>
     <string name="exercise_1">Exercise 1</string>
     <string name="exercise_2">Exercise 2</string>
@@ -20,4 +21,5 @@
     <string name="reset_title">Reset your set?</string>
     <string name="reset_body">Are you sure you want to reset your Set count for this exercise ?</string>
     <string name="reset_cancel">Cancel</string>
+    <string name="logo_with_text_description">App logo with text Strenght4Mom</string>
 </resources>
