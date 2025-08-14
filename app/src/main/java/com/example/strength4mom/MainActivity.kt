@@ -16,10 +16,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            Strength4MomTheme {
                 val windowSize = calculateWindowSizeClass(this)
                 AppContainer(windowSize = windowSize)
-            }
         }
     }
 }
