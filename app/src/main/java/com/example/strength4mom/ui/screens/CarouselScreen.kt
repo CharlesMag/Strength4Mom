@@ -19,21 +19,26 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.strength4mom.data.dto.Exercise
+import com.example.strength4mom.data.dto.ExerciseResponse
 import com.example.strength4mom.ui.viewmodels.SearchViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CarouselScreen(
-    searchViewModel: SearchViewModel = viewModel(),
-    exercises: List<Exercise> = searchViewModel.exercises.value,
+    searchViewModel: SearchViewModel = koinViewModel(),
 ) {
+    val searchUiState by searchViewModel.uiState.collectAsState()
+    val exercise = searchUiState.exercises
+
     //SEARCH BIT
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -44,7 +49,7 @@ fun CarouselScreen(
     ) {
         Button(
             onClick = {
-                searchViewModel.fetchExercises(
+                searchViewModel.loadExerciseList(
                     name = "Chest",
                 )
             },
@@ -53,9 +58,9 @@ fun CarouselScreen(
         }
 
         //CAROUSEL DOWN BIT
-        if (exercises.isNotEmpty()) {
+        if (exercise.isNotEmpty()) {
 
-            ExerciseCarousel(exercises)
+            ExerciseCarousel(exercise)
         } else {
             Text("No exercises available.")
         }
@@ -64,8 +69,8 @@ fun CarouselScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ExerciseCarousel(exercises: List<Exercise>) {
-    val state: PagerState = rememberPagerState { exercises.size }
+fun ExerciseCarousel(exerciseResponses: List<ExerciseResponse>) {
+    val state: PagerState = rememberPagerState { exerciseResponses.size }
     HorizontalPager(
         state = state,
         beyondViewportPageCount = 1,
@@ -79,7 +84,7 @@ fun ExerciseCarousel(exercises: List<Exercise>) {
             .padding(vertical = 16.dp),
 
         ) { index ->
-        val exercise = exercises[index]
+        val exercise = exerciseResponses[index]
         Card(
             modifier = Modifier
                 .height(500.dp)

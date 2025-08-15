@@ -30,17 +30,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.strength4mom.R
-import com.example.strength4mom.data.dto.Exercise
+import com.example.strength4mom.data.dto.ExerciseResponse
 import com.example.strength4mom.data.local.muscleList
 import com.example.strength4mom.data.local.typeList
 import com.example.strength4mom.ui.uistate.SearchPageUiState
 import com.example.strength4mom.ui.viewmodels.SearchViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 
 @Composable
 fun SearchScreen(
-    searchViewModel: SearchViewModel = viewModel(),
-    exercises: List<Exercise> = searchViewModel.exercises.value,
+    searchViewModel: SearchViewModel = koinViewModel(),
 ) {
     val searchUiState by searchViewModel.uiState.collectAsState()
 
@@ -59,8 +59,7 @@ fun SearchScreen(
         )
 
         SearchResult(
-            exercises,
-            searchViewModel
+            searchUiState
         )
     }
 
@@ -68,82 +67,81 @@ fun SearchScreen(
 
 @Composable
 fun SearchResult(
-    exercises: List<Exercise>,
-    searchViewModel: SearchViewModel,
+    searchUiState: SearchPageUiState,
     modifier: Modifier = Modifier
 ) {
+
+    val isLoading = searchUiState.isLoading
+    val exercises = searchUiState.exercises
+    val error = searchUiState.errorMessage
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .padding(8.dp)
     ) {
-        val isLoading by searchViewModel.isLoading
         // Display exercises list or a fallback message if no data
-        if (isLoading) {
-            CircularProgressIndicator(
-                modifier = Modifier
-                    .size(48.dp)
-                    .padding(16.dp)
-            )
-        }
-        if (!isLoading && exercises.isEmpty()) {
-            Text(text = "Enter an exercise name of use the filters")
-        }
+        when {
+            isLoading -> {
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .size(48.dp)
+                        .padding(16.dp)
+                )
+            }
 
-        if (exercises.isNotEmpty()) {
-            var itemCount = exercises.size
-            println("NUMBER OF EXO: $itemCount")
+            error != null -> {
+                Text(text = "Error: $error", color = Color.Red)
+            }
+
+            exercises.isEmpty() -> {
+                Text(text = "Enter an exercise name of use the filters")
+            }
+
+            else -> {
+                LazyColumn {
+                    items(exercises) { exercises ->
+                        ExerciseCard(exercises)
+
+                    }
+                }
+            }
         }
     }
-    Column(
-        horizontalAlignment = Alignment.Start,
-        modifier = modifier
-            .padding(8.dp)
+}
+
+
+@Composable
+fun ExerciseCard(exercise: ExerciseResponse) {
+    Card(
+        modifier = Modifier
+            .padding(dimensionResource(R.dimen.padding_small))
     ) {
-        if (exercises.isNotEmpty()) {
-            exercises.forEach { exercise ->
-                Card(
-                    modifier = modifier
-                        .padding(dimensionResource(R.dimen.padding_small))
-                ) {
-                    LazyColumn {
-                        items(exercises) { exercise ->
-                            Text(
-                                textAlign = TextAlign.Start,
-                                text = """
+        Text(
+            textAlign = TextAlign.Start,
+            text = """
                                         |Name: ${exercise.name},
                                         |Muscle: ${exercise.muscle},
                                         |Type: ${exercise.type},
                                         |Equipment: ${exercise.equipment},
                                         |Instructions: ${exercise.instructions},
                                        """.trimMargin(),
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(dimensionResource(R.dimen.padding_medium))
-                            )
-                        }
-                    }
-                }
-            }
-        } else {
-            val error by searchViewModel.errorMessage
-            // Fallback text if no exercises are found
-            if (error != null) {
-                Text(text = "Error: $error", color = Color.Red)
-            }
-        }
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(dimensionResource(R.dimen.padding_medium))
+        )
     }
 }
 
 @Composable
 fun FiltersAndSearch(
-    searchViewModel: SearchViewModel = viewModel(),
+    searchViewModel: SearchViewModel = koinViewModel(),
     searchUiState: SearchPageUiState
 ) {
     Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.padding(8.dp)) {
         DropdownMenu(
             expanded = searchUiState.muscleExpanded,
-            onDismissRequest = { searchViewModel.muscleExpanded() },
+            onDismissRequest = { searchViewModel.muscleDropdownExpanded() },
             modifier = Modifier
                 .fillMaxWidth()
         ) {
@@ -151,7 +149,7 @@ fun FiltersAndSearch(
                 DropdownMenuItem(
                     text = { Text(muscleList, maxLines = 1) },
                     onClick = {
-                        searchViewModel.muscleExpanded()
+                        searchViewModel.muscleDropdownExpanded()
                         searchViewModel.muscleDropdownSelection(muscleList.lowercase())
                     }
                 )
@@ -160,14 +158,14 @@ fun FiltersAndSearch(
 
         DropdownMenu(
             expanded = searchUiState.typeExpanded,
-            onDismissRequest = { searchViewModel.typeExpanded() },
+            onDismissRequest = { searchViewModel.typeDropdownExpanded() },
             modifier = Modifier.fillMaxWidth()
         ) {
             typeList.forEach { typeList ->
                 DropdownMenuItem(
                     text = { Text(typeList) },
                     onClick = {
-                        searchViewModel.typeExpanded()
+                        searchViewModel.typeDropdownExpanded()
                         searchViewModel.typeDropdownSelection(typeList.lowercase())
                     }
                 )
@@ -175,13 +173,13 @@ fun FiltersAndSearch(
         }
 
         Button(
-            onClick = { searchViewModel.muscleExpanded() }
+            onClick = { searchViewModel.muscleDropdownExpanded() }
         ) {
             Text(
                 text = searchUiState.muscleDropdownSelection?.let { "$it ▼" }
                     ?: "Muscle ▼", maxLines = 1,
                 modifier = Modifier
-                    .clickable { searchViewModel.muscleExpanded() }
+                    .clickable { searchViewModel.muscleDropdownExpanded() }
                     .padding(8.dp)
             )
         }
@@ -189,13 +187,13 @@ fun FiltersAndSearch(
         Spacer(modifier = Modifier.padding(8.dp))
 
         Button(
-            onClick = { searchViewModel.typeExpanded() }
+            onClick = { searchViewModel.typeDropdownExpanded() }
         ) {
             Text(
                 text = searchUiState.typeDropdownSelection?.let { "$it ▼" } ?: "Type ▼",
                 maxLines = 1,
                 modifier = Modifier
-                    .clickable { searchViewModel.typeExpanded() }
+                    .clickable { searchViewModel.typeDropdownExpanded() }
                     .padding(8.dp)
             )
         }
@@ -204,7 +202,7 @@ fun FiltersAndSearch(
 
     Button(
         onClick = {
-            searchViewModel.fetchExercises(
+            searchViewModel.loadExerciseList(
                 muscle = searchUiState.muscleDropdownSelection,
                 name = searchUiState.searchBarQuery,
                 type = searchUiState.typeDropdownSelection

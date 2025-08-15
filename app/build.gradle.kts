@@ -19,6 +19,7 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        buildConfigField("String", "BASE_URL", "\"https://api.api-ninjas.com/v1/\"")
     }
 
     buildTypes {
@@ -35,6 +36,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
     buildFeatures {
+        buildConfig = true
         compose = true
     }
     composeOptions {

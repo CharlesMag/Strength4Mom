@@ -1,53 +1,59 @@
 package com.example.strength4mom.di
 
 import android.util.Log
-import com.example.strength4mom.data.dto.Exercise
+import org.koin.core.module.dsl.viewModel
+import com.example.strength4mom.BuildConfig
+import com.example.strength4mom.data.repository.ExerciseRepository
+import com.example.strength4mom.data.repository.ExerciseRepositoryImpl
+import com.example.strength4mom.domain.ExerciseService
+import com.example.strength4mom.ui.viewmodels.SearchViewModel
+import kotlinx.coroutines.Dispatchers
+import okhttp3.Dispatcher
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Response
+import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.Query
 
-// Configure OkHttp client with logging
-val loggingInterceptor = HttpLoggingInterceptor().apply {
-    level = HttpLoggingInterceptor.Level.BODY // Can be: NONE, BASIC, HEADERS, BODY
-}
+fun exerciseService(retrofit: Retrofit): ExerciseService =
+    retrofit.create(ExerciseService::class.java)
 
-val parameterLoggingInterceptor = Interceptor { chain ->
-    val request = chain.request()
-    val url = request.url
-    Log.d("RetrofitParams", "Request URL: $url")
-    chain.proceed(request)
-}
+val appModule = module {
 
-val okHttpClient = OkHttpClient.Builder()
-    .addInterceptor(loggingInterceptor)
-    .addInterceptor(parameterLoggingInterceptor)
-    .build()
+    factory { exerciseService(get()) }
+    factory<ExerciseRepository> { ExerciseRepositoryImpl(get()) }
+    viewModel { SearchViewModel(get(), get()) }
 
-object RetrofitInstance {
-    private const val BASE_URL = "https://api.api-ninjas.com/v1/"
+    single { Dispatchers.IO }
 
-    val apiService: ApiService by lazy {
+    single {
+        // Configure OkHttp client with logging
+        val loggingInterceptor = HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+
+        val parameterLoggingInterceptor = Interceptor { chain ->
+            val request = chain.request()
+            val url = request.url
+            Log.d("RetrofitParams", "Request URL: $url")
+            chain.proceed(request)
+        }
+
+        OkHttpClient
+            .Builder()
+            .addInterceptor(loggingInterceptor)
+            .addInterceptor(parameterLoggingInterceptor)
+            .build()
+    }
+
+
+    single {
         Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .client(okHttpClient) // Add the custom OkHttp client
+            .baseUrl(BuildConfig.BASE_URL)
+            .client(get()) // Add the custom OkHttp client
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(ApiService::class.java)
     }
-}
 
-interface ApiService {
-    @GET("exercises")
-    suspend fun fetchExercises(
-        @Header("X-Api-Key") apiKey: String,
-        @Query("muscle") muscle: String? = null,
-        @Query("name") name: String? = null,
-        @Query("type") type: String? = null
-    ): Response<List<Exercise>>
 }

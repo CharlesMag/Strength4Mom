@@ -1,6 +1,6 @@
 package com.example.strength4mom.domain
 
-import com.example.strength4mom.data.dto.Exercise
+import com.example.strength4mom.data.dto.ExerciseResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -13,5 +13,7 @@ interface ExerciseService {
         @Query("muscle") muscle: String? = null,
         @Query("name") name: String? = null,
         @Query("type") type: String? = null
-    ): Response<List<Exercise>>
+    ): Response<List<ExerciseResponse>>
 }
+
+//Should the type here be Response<List<Exercise>> or is it just on the Interface level and here the type is just the Interface?

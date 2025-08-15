@@ -1,6 +1,6 @@
 package com.example.strength4mom.data.dto
 
-data class Exercise(
+data class ExerciseResponse(
     val name: String,
     val type: String,
     val muscle: String,
