@@ -21,8 +21,8 @@ fun exerciseService(retrofit: Retrofit): ExerciseService =
 
 val appModule = module {
 
-    factory { exerciseService(get()) }
-    factory<ExerciseRepository> { ExerciseRepositoryImpl(get()) }
+    single { exerciseService(get()) } //Creates one instance of exerciseService feeding it a Retrofit instance and uses it when I call Koin for ExerciseService
+    factory <ExerciseRepository> { ExerciseRepositoryImpl(get()) } //When ExerciseRepository is needed, Koin created a new instance of  ExerciseRepositoryImpl() providing the parameter with get()
     viewModel { SearchViewModel(get(), get()) }
 
     single { Dispatchers.IO }

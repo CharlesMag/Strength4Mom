@@ -95,7 +95,7 @@ fun SearchResult(
             }
 
             exercises.isEmpty() -> {
-                Text(text = "Enter an exercise name of use the filters")
+                Text(text = "Enter an exercise name or use the filters")
             }
 
             else -> {

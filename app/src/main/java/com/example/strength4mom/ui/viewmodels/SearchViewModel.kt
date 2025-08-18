@@ -27,6 +27,7 @@ class SearchViewModel(
         type: String? = null
     ) {
 
+        //Since a network call is being done, Koin is proving the Dispatcher.IO for it to run on this thread and avoid a UI freeze by using the default UI dispatcher
         viewModelScope.launch(dispatcher) {
             _uiState.update { it.copy(isLoading = true, errorMessage = null) }
 

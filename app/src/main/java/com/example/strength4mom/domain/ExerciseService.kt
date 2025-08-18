@@ -16,4 +16,3 @@ interface ExerciseService {
     ): Response<List<ExerciseResponse>>
 }
 
-//Should the type here be Response<List<Exercise>> or is it just on the Interface level and here the type is just the Interface?

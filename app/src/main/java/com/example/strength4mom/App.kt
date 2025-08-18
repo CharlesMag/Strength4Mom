@@ -12,7 +12,7 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        Log.d("App", "Koin is starting...")
+        // Starting Koin here
         startKoin {
             androidContext(this@App)
             modules(appModule)
