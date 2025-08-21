@@ -3,6 +3,7 @@
     <string name="workout_page">Your Workout</string>
     <string name="searchScreen">Search Screen</string>
     <string name="carouselScreen">Carousel Screen</string>
+    <string name="notesScreen">Notes Screen</string>
     <string name="StarterScreenButton">Start your workout</string>
     <string name="exercise_1">Goblet Squat</string>
     <string name="exercise_2">Single leg deadlift</string>

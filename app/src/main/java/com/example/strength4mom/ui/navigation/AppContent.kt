@@ -16,6 +16,7 @@ import com.example.strength4mom.R
 import com.example.strength4mom.data.local.DataSourceExercises.exos
 import com.example.strength4mom.ui.screens.CarouselScreen
 import com.example.strength4mom.ui.screens.ExoScreenItem
+import com.example.strength4mom.ui.screens.NotesScreen
 import com.example.strength4mom.ui.screens.SearchScreen
 import com.example.strength4mom.ui.screens.StartAppScreen
 
@@ -34,6 +35,7 @@ fun AppContent(
                 onStartWorkoutButtonClicked = { navHostController.navigate(Strength4MomScreen.ExoScreen.name) },
                 onStartSearchButtonClicked = { navHostController.navigate(Strength4MomScreen.SearchScreen.name) },
                 onStartCarouselTest = { navHostController.navigate(Strength4MomScreen.CarouselScreen.name) },
+                onStartNotesScreen = { navHostController.navigate(Strength4MomScreen.NotesScreen.name)},
                 windowSize = WindowWidthSizeClass.Compact,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -53,6 +55,9 @@ fun AppContent(
         composable(route = Strength4MomScreen.CarouselScreen.name) {
             CarouselScreen()
         }
+        composable(route = Strength4MomScreen.NotesScreen.name) {
+            NotesScreen()
+        }
     }
 }
 
@@ -61,5 +66,6 @@ enum class Strength4MomScreen(@StringRes val title: Int) {
     ExoScreen(title = R.string.workout_page),
     SearchScreen(title = R.string.searchScreen),
     CarouselScreen(title = R.string.carouselScreen),
+    NotesScreen(title = R.string.notesScreen)
 
 }

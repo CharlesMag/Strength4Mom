@@ -22,6 +22,7 @@ fun StartAppScreen(
     onStartWorkoutButtonClicked: () -> Unit,
     onStartSearchButtonClicked: () -> Unit,
     onStartCarouselTest: () -> Unit,
+    onStartNotesScreen: () -> Unit,
     windowSize: WindowWidthSizeClass,
     modifier: Modifier = Modifier
 ) {
@@ -53,7 +54,14 @@ fun StartAppScreen(
             onClick = onStartCarouselTest,
         ) {
             Text(
-                text = "Carousel Test",
+                text = "Carousel",
+            )
+        }
+        Button(
+            onClick = onStartNotesScreen,
+        ) {
+            Text(
+                text = "Notes",
             )
         }
     }
@@ -69,6 +77,7 @@ fun StrengthAppPreview() {
                 onStartWorkoutButtonClicked = {},
                 onStartSearchButtonClicked = {},
                 onStartCarouselTest = {},
+                onStartNotesScreen = {}
             )
         }
     }

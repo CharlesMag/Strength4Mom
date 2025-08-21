@@ -6,6 +6,7 @@ import com.example.strength4mom.BuildConfig
 import com.example.strength4mom.data.repository.ExerciseRepository
 import com.example.strength4mom.data.repository.ExerciseRepositoryImpl
 import com.example.strength4mom.domain.ExerciseService
+import com.example.strength4mom.ui.viewmodels.NotesViewModel
 import com.example.strength4mom.ui.viewmodels.SearchViewModel
 import kotlinx.coroutines.Dispatchers
 import okhttp3.Dispatcher
@@ -24,6 +25,7 @@ val appModule = module {
     single { exerciseService(get()) } //Creates one instance of exerciseService feeding it a Retrofit instance and uses it when I call Koin for ExerciseService
     factory <ExerciseRepository> { ExerciseRepositoryImpl(get()) } //When ExerciseRepository is needed, Koin created a new instance of  ExerciseRepositoryImpl() providing the parameter with get()
     viewModel { SearchViewModel(get(), get()) }
+    viewModel { NotesViewModel() }
 
     single { Dispatchers.IO }
 

@@ -1,4 +1,5 @@
 package com.example.strength4mom.ui.uistate
 
-class NotesScreenUiState {
-}
+data class NotesScreenUiState(
+    val notesBarTextField: String? = null,
+)
