@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.strength4mom.data.dto.Resource
 import com.example.strength4mom.data.repository.ExerciseRepository
-import com.example.strength4mom.ui.uistate.SearchPageUiState
+import com.example.strength4mom.ui.uistate.SearchScreenUiState
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,8 +18,8 @@ class SearchViewModel(
 ) : ViewModel() {
 
     //Search Page UI state
-    private val _uiState = MutableStateFlow(SearchPageUiState())
-    val uiState: StateFlow<SearchPageUiState> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow(SearchScreenUiState())
+    val uiState: StateFlow<SearchScreenUiState> = _uiState.asStateFlow()
 
     fun loadExerciseList(
         muscle: String? = null,

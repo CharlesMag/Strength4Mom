@@ -28,12 +28,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.strength4mom.R
 import com.example.strength4mom.data.dto.ExerciseResponse
 import com.example.strength4mom.data.local.muscleList
 import com.example.strength4mom.data.local.typeList
-import com.example.strength4mom.ui.uistate.SearchPageUiState
+import com.example.strength4mom.ui.uistate.SearchScreenUiState
 import com.example.strength4mom.ui.viewmodels.SearchViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -67,7 +66,7 @@ fun SearchScreen(
 
 @Composable
 fun SearchResult(
-    searchUiState: SearchPageUiState,
+    searchUiState: SearchScreenUiState,
     modifier: Modifier = Modifier
 ) {
 
@@ -136,7 +135,7 @@ fun ExerciseCard(exercise: ExerciseResponse) {
 @Composable
 fun FiltersAndSearch(
     searchViewModel: SearchViewModel = koinViewModel(),
-    searchUiState: SearchPageUiState
+    searchUiState: SearchScreenUiState
 ) {
     Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.padding(8.dp)) {
         DropdownMenu(
@@ -219,7 +218,7 @@ fun FiltersAndSearch(
 @Composable
 fun SearchBarItem(
     searchViewModel: SearchViewModel,
-    searchUiState: SearchPageUiState,
+    searchUiState: SearchScreenUiState,
     modifier: Modifier = Modifier,
 ) {
 

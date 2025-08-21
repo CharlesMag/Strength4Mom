@@ -2,7 +2,7 @@ package com.example.strength4mom.ui.uistate
 
 import com.example.strength4mom.data.dto.ExerciseResponse
 
-data class SearchPageUiState(
+data class SearchScreenUiState(
     val exercises: List<ExerciseResponse> = emptyList(),
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
