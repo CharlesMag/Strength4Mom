@@ -1,9 +1,9 @@
-package com.example.strength4mom.model
+package com.example.strength4mom.data.dto
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 
-class ExoItem {
+class ExoItemClass {
     data class Exo(
         @DrawableRes val imageResourceID: Int,
         @StringRes val name: Int,

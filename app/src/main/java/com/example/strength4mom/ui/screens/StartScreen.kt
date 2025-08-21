@@ -1,4 +1,4 @@
-package com.example.strength4mom.ui.theme
+package com.example.strength4mom.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -15,7 +15,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.strength4mom.R
-import com.example.strength4mom.ui.theme.theme.Strength4MomTheme
 
 
 @Composable
@@ -63,7 +62,7 @@ fun StartAppScreen(
 @Preview(showBackground = true)
 @Composable
 fun StrengthAppPreview() {
-    Strength4MomTheme {
+    _root_ide_package_.com.example.strength4mom.ui.theme.Strength4MomTheme {
         Surface {
             StartAppScreen(
                 windowSize = WindowWidthSizeClass.Medium,

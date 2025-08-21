@@ -1,4 +1,4 @@
-package com.example.strength4mom.ui.theme.utils
+package com.example.strength4mom.data.local
 
 //To be used later when I have a nav rail
 enum class StrengthNavigationApp {

@@ -1,6 +1,7 @@
-package com.example.strength4mom.ui.theme.exo
+package com.example.strength4mom.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
+import com.example.strength4mom.ui.exo.ExoUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -31,7 +32,10 @@ class ExoViewModel : ViewModel() {
     fun triageCurrentSet(exoSets: Int) {
         val exoSetsMax = exoSets - 1
         when (uiState.value.currentSet) {
-            in 0 .. exoSetsMax -> { updateCurrentSet(exoSets) }
+            in 0..exoSetsMax -> {
+                updateCurrentSet(exoSets)
+            }
+
             exoSets.absoluteValue -> {
                 updateCurrentSetGhost()
                 _uiState.update { currentState ->
@@ -40,16 +44,19 @@ class ExoViewModel : ViewModel() {
                     )
                 }
             }
-            else -> { updateCurrentSetGhost() }
+
+            else -> {
+                updateCurrentSetGhost()
+            }
         }
     }
 
     private fun updateCurrentSetGhost() {
-            _uiState.update { currentState ->
-                currentState.copy(
-                    currentSetGhost = currentState.currentSetGhost.inc(),
-                )
-            }
+        _uiState.update { currentState ->
+            currentState.copy(
+                currentSetGhost = currentState.currentSetGhost.inc(),
+            )
+        }
     }
 
     private fun updateCurrentSet(exoSets: Int) {

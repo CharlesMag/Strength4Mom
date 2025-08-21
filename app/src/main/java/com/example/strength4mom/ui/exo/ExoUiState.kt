@@ -1,7 +1,4 @@
-package com.example.strength4mom.ui.theme.exo
-
-import android.app.Dialog
-
+package com.example.strength4mom.ui.exo
 
 data class ExoUiState(
     val expanded: Boolean = false,

@@ -1,4 +1,4 @@
-package com.example.strength4mom.ui.theme.theme
+package com.example.strength4mom.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

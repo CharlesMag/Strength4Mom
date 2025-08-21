@@ -1,4 +1,4 @@
-package com.example.strength4mom.ui.theme.exo
+package com.example.strength4mom.ui.screens
 
 //import com.example.strength4mom.ui.theme.previews.ExoPreviewObject
 import androidx.annotation.StringRes
@@ -21,7 +21,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
@@ -31,18 +30,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.strength4mom.R
-import com.example.strength4mom.model.ExoItem
-import com.example.strength4mom.ui.theme.previews.ExoPreviewObject
-import com.example.strength4mom.ui.theme.theme.Strength4MomTheme
+import com.example.strength4mom.data.dto.ExoItemClass
+import com.example.strength4mom.ui.viewmodels.ExoViewModel
 
 
 /**
@@ -50,7 +46,7 @@ import com.example.strength4mom.ui.theme.theme.Strength4MomTheme
  */
 @Composable
 fun ExoScreenItem(
-    exo: ExoItem.Exo,
+    exo: ExoItemClass.Exo,
     windowSize: WindowWidthSizeClass,
     viewModel: ExoViewModel = viewModel(),
     exoViewModel: ExoViewModel = viewModel(key = exo.Id.toString()),
@@ -142,7 +138,7 @@ fun ExoInfo(
 
         if (exoUiState.currentSetGhost > exoSets) {
             AlertDialog(
-                onDismissRequest = { exoViewModel.closeOpenDialog()},
+                onDismissRequest = { exoViewModel.closeOpenDialog() },
                 confirmButton = {
                     TextButton(
                         onClick = {
@@ -150,7 +146,8 @@ fun ExoInfo(
                             exoViewModel.updateExoCapsule()
                         }
                     ) {
-                        Text(stringResource(R.string.reset_button)) }
+                        Text(stringResource(R.string.reset_button))
+                    }
                 },
                 title = {
                     Text(stringResource(R.string.reset_title))
@@ -213,65 +210,4 @@ fun ExoExpanded(
             .clip(MaterialTheme.shapes.small)
     )
     Text(stringResource(exoDescription))
-}
-
-@Preview(showBackground = false)
-@Composable
-fun ExoScreenItemPreviewCompact() {
-    Strength4MomTheme {
-        Surface {
-            ExoScreenItem(
-                windowSize = WindowWidthSizeClass.Compact,
-                exo = ExoPreviewObject.exoPreviewObject
-            )
-        }
-    }
-}
-
-@Preview(showBackground = false, widthDp = 700)
-@Composable
-fun ExoScreenItemPreviewMedium() {
-    Strength4MomTheme {
-        Surface {
-            ExoScreenItem(
-                windowSize = WindowWidthSizeClass.Medium,
-                exo = ExoPreviewObject.exoPreviewObject
-            )
-        }
-    }
-}
-
-@Preview(showBackground = false, widthDp = 1000)
-@Composable
-fun ExoScreenItemPreviewExpanded() {
-    Strength4MomTheme {
-        Surface {
-            ExoScreenItem(
-                windowSize = WindowWidthSizeClass.Expanded,
-                exo = ExoPreviewObject.exoPreviewObject
-            )
-        }
-    }
-}
-
-@Preview(showBackground = false, widthDp = 1000)
-@Composable
-fun ExoScreenItemPreviewExpandedExpanded() {
-    Strength4MomTheme {
-        Surface {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(dimensionResource(R.dimen.padding_small))
-            ) {
-                ExoScreenItem(
-                    windowSize = WindowWidthSizeClass.Expanded,
-                    exo = ExoPreviewObject.exoPreviewObject
-                )
-                ExoExpanded(image = ExoPreviewObject.exoPreviewObject.imageResourceID, exoDescription = ExoPreviewObject.exoPreviewObject.description, modifier = Modifier)
-
-            }
-        }
-    }
 }
