@@ -1,7 +1,7 @@
 package com.example.strength4mom.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
-import com.example.strength4mom.ui.exo.ExoUiState
+import com.example.strength4mom.ui.uistate.ExoUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

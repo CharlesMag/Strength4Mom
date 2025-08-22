@@ -1,18 +1,22 @@
 package com.example.strength4mom.di
 
 import android.util.Log
-import org.koin.core.module.dsl.viewModel
+import androidx.room.Room
 import com.example.strength4mom.BuildConfig
+import com.example.strength4mom.data.local.notes.NotesDao
+import com.example.strength4mom.data.local.notes.NotesDatabase
+import com.example.strength4mom.data.local.notes.NotesRepository
+import com.example.strength4mom.data.local.notes.OfflineNotesRepository
 import com.example.strength4mom.data.repository.ExerciseRepository
 import com.example.strength4mom.data.repository.ExerciseRepositoryImpl
 import com.example.strength4mom.domain.ExerciseService
 import com.example.strength4mom.ui.viewmodels.NotesViewModel
 import com.example.strength4mom.ui.viewmodels.SearchViewModel
 import kotlinx.coroutines.Dispatchers
-import okhttp3.Dispatcher
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -23,9 +27,10 @@ fun exerciseService(retrofit: Retrofit): ExerciseService =
 val appModule = module {
 
     single { exerciseService(get()) } //Creates one instance of exerciseService feeding it a Retrofit instance and uses it when I call Koin for ExerciseService
-    factory <ExerciseRepository> { ExerciseRepositoryImpl(get()) } //When ExerciseRepository is needed, Koin created a new instance of  ExerciseRepositoryImpl() providing the parameter with get()
+    factory<ExerciseRepository> { ExerciseRepositoryImpl(get()) } //When ExerciseRepository is needed, Koin created a new instance of  ExerciseRepositoryImpl() providing the parameter with get()
     viewModel { SearchViewModel(get(), get()) }
-    viewModel { NotesViewModel() }
+    factory<NotesRepository> { OfflineNotesRepository(get()) }
+    viewModel { NotesViewModel(get()) }
 
     single { Dispatchers.IO }
 
@@ -57,5 +62,15 @@ val appModule = module {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
+
+    single {
+        Room.databaseBuilder(
+            get(), // application context
+            NotesDatabase::class.java,
+            "notes_database"
+        ).build()
+    }
+
+    single<NotesDao> { get<NotesDatabase>().notesDao() }
 
 }

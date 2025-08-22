@@ -1,4 +1,4 @@
-package com.example.strength4mom.ui.exo
+package com.example.strength4mom.ui.uistate
 
 data class ExoUiState(
     val expanded: Boolean = false,
